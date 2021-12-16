@@ -152,6 +152,8 @@ namespace RGR
             }
         }
 
+
+
         public void fillIncidenceMatrix(int numberV, List<Edge> E, int[,] matrix)
         {
             for (int i = 0; i < numberV; i++)
@@ -163,6 +165,7 @@ namespace RGR
                 matrix[E[i].v2, E[i].v1] = 1;
             }
         }
+
         public void fillAdjacencyMatrix(int numberV, List<Edge> E, int[,] matrix)
         {
             const int INFINITY = 999;
@@ -175,5 +178,7 @@ namespace RGR
                 matrix[E[i].v2, E[i].v1] = E[i].weight;
             }
         }
+
+
     }
 }

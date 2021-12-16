@@ -286,6 +286,14 @@ namespace RGR
             }
         }
 
+        private bool isEdgeExist(int[,] matrix, int v1, int v2)
+        {
+            if (matrix[v1, v2] != INFINITY && matrix[v1, v2] != 0)
+                return true;
+            else 
+                return false;
+        }
+
         private void BFS(object sender, EventArgs e)
         {
             string res = " ";
@@ -352,50 +360,39 @@ namespace RGR
             start--;    //индексация с нуля
 
             Stack<int> stack = new Stack<int>();
-            bool[] marks = new bool[V.Count];
-            bool[] stack_marks = new bool[V.Count];
-            for (int i = 0; i < V.Count; i++)
-            {
-                marks[i] = false;
-                stack_marks[i] = false;
-            }
-            //res = startVert.Text;
+
+            List<int> list = new List<int>();
             stack.Push(start);
             int prom;
             
             while (stack.Count != 0)
             {
-                
                 prom = stack.Pop();
-
-                if (marks[prom] != true)    //если вершина не помечена
+                //если вершина не помечена
+                if (!list.Contains(prom)) 
                 {
-                    for (int i = V.Count-1; i >= 0; i--)
-                        if (AMatrix[prom, i] != 0 && AMatrix[prom, i] != INFINITY && marks[i] == false)
-                        { 
-                            if(stack_marks[i] == false)
+                    for (int i = V.Count - 1; i >= 0; i--)
+                        //проверка, вершина prom смежна с вершиной i
+                        if (isEdgeExist(AMatrix, prom, i)) 
+                        {
+                            //если рассматриваемая вершина уже есть в списке, мы ее скипаем
+                            if (!list.Contains(i))
                             {
-                                stack.Push(i);              //обрабатываем смежные вершины и кидаем их в стек
-                                stack_marks[i] = true;
+                                stack.Push(i);             
                             }
-                            
                         }
-                    marks[prom] = true;
-                    //помечаем вершину как обработанную
+                    list.Add(prom);
                 }
-                res = res + (prom + 1).ToString() + " ";
-                
             }
+            //вывод порядка обхода вершин в результирующую строку
+            for (int i = 0; i < list.Count; i++)
+                res = res + (list[i] + 1).ToString() + " ";
 
-            for(int i = 0; i < V.Count; i++)
-                if (marks[i] == false)
-                {
-                    res += " (граф несвязный)";
-                    break;
-                }
-            
+            //обозначение, что если обошли не все вершины, то граф несвязный
+            if (list.Count != V.Count) { res += " (граф несвязный)"; }
+
+            //заносим результат в поле вывода
             resultBox.Text = res;
         }
     }
-    //это dfs
 }
